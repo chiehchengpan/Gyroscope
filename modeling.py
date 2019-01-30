@@ -2,11 +2,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
-
+from sklearn.externals import joblib
 
 # 建模型
 if __name__ == '__main__':
-    df = pd.read_csv('stdev_complete.csv', encoding='utf-8')
+    filename = 'data/Total_training_data.csv'
+
+    df = pd.read_csv(filename, encoding='utf-8')
 
     # 移除時間與資料編號欄位
     df = df.drop(['time', 'data_no.'], axis=1)
@@ -21,3 +23,6 @@ if __name__ == '__main__':
     print('預測:', predict)
     print('答案:', list(target_test))
     print('準確率:', accuracy_score(target_test, predict) * 100, '%')
+
+    # save model
+    joblib.dump(clf, 'clf.pkl')

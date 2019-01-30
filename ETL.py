@@ -14,14 +14,16 @@ from tag import tag
 
 if __name__ == '__main__':
     # filename = str(sys.argv[1])
-    df = pd.read_csv('data/2019-01-28_20_51.csv', encoding='utf-8')
+    filename = 'data/2019-01-29_22_10.csv'
+    transfilename = filename.split('.')[0] + '_trans.csv'
+    df = pd.read_csv(filename, encoding='utf-8')
 
     # Step.1 => 貼標
     # 輸入標籤/開始/結束時間, 集合成字典
-    dic1 = dic_generate('0', '2019-01-28 21:00', '2019-01-28 21:10')
-    dic2 = dic_generate('1', '2019-01-28 21:14', '2019-01-28 21:24')
-    dic3 = dic_generate('2', '2019-01-28 21:25', '2019-01-28 21:35')
-    dic4 = dic_generate('3', '2019-01-28 21:37', '2019-01-28 21:39')
+    dic1 = dic_generate('0', '2019-01-29 21:35', '2019-01-29 21:45')
+    dic2 = dic_generate('1', '2019-01-29 21:50', '2019-01-29 22:00')
+    dic3 = dic_generate('2', '2019-01-29 22:10', '2019-01-29 22:12')
+    dic4 = dic_generate('3', '2019-01-29 22:14', '2019-01-29 22:16')
 
     dic_sum = {}
     for d in (dic1, dic2, dic3, dic4):
@@ -50,7 +52,7 @@ if __name__ == '__main__':
     df_3_trans = transfer(df_3, ls)
 
     df = pd.concat([df_0_trans, df_1_trans, df_2_trans, df_3_trans], axis=0, ignore_index=True)
-    df.to_csv('data/2019-01-28_20_51_trans.csv', encoding='utf-8', index=False)
+    df.to_csv(transfilename, encoding='utf-8', index=False)
 
     # Step.3 => 建模型
     # 移除時間與資料編號欄位
@@ -75,7 +77,7 @@ if __name__ == '__main__':
     records = []
 
     # 讀檔案
-    with open('data/2019-01-28_20_51_trans.csv', newline='', encoding='utf-8')as csvfile:
+    with open(transfilename, newline='', encoding='utf-8')as csvfile:
         rows = csv.reader(csvfile)
 
         for row in list(rows)[1:]:
