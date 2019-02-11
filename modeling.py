@@ -6,7 +6,7 @@ from sklearn.externals import joblib
 
 # 建模型
 if __name__ == '__main__':
-    filename = 'data/Total_training_data.csv'
+    filename = 'data/Total_training_data_0130.csv'
 
     df = pd.read_csv(filename, encoding='utf-8')
 

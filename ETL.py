@@ -14,16 +14,16 @@ from tag import tag
 
 if __name__ == '__main__':
     # filename = str(sys.argv[1])
-    filename = 'data/2019-01-29_22_10.csv'
+    filename = 'data/2019-01-30_21_15.csv'
     transfilename = filename.split('.')[0] + '_trans.csv'
     df = pd.read_csv(filename, encoding='utf-8')
 
     # Step.1 => 貼標
     # 輸入標籤/開始/結束時間, 集合成字典
-    dic1 = dic_generate('0', '2019-01-29 21:35', '2019-01-29 21:45')
-    dic2 = dic_generate('1', '2019-01-29 21:50', '2019-01-29 22:00')
-    dic3 = dic_generate('2', '2019-01-29 22:10', '2019-01-29 22:12')
-    dic4 = dic_generate('3', '2019-01-29 22:14', '2019-01-29 22:16')
+    dic1 = dic_generate('0', '2019-01-30 21:24', '2019-01-30 21:33')
+    dic2 = dic_generate('1', '2019-01-30 21:36', '2019-01-30 21:46')
+    dic3 = dic_generate('2', '2019-01-30 21:47', '2019-01-30 21:57')
+    dic4 = dic_generate('3', '2019-01-30 22:00', '2019-01-30 22:02')
 
     dic_sum = {}
     for d in (dic1, dic2, dic3, dic4):

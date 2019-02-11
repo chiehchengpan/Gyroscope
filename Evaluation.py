@@ -59,6 +59,7 @@ if __name__ == '__main__':
     # 評分
     clf = joblib.load('clf.pkl')
     lis = list(clf.predict(df_model))
+    print(lis)
     print('狀態', vote(lis))
 
     # 把評分/使用者代號加入df
