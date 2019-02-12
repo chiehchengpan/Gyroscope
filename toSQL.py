@@ -1,12 +1,15 @@
 import mysql.connector
 import csv
 
+# toSQL.py --> 把ETL後的檔案寫進資料庫
+
 if __name__ == "__main__":
     usercode = '00'
     records = []
+    filename = 'data/2019-01-28_20_51_trans.csv'
 
     # 讀檔案
-    with open('data/2019-01-28_20_51_trans.csv', newline='', encoding='utf-8')as csvfile:
+    with open(filename, newline='', encoding='utf-8')as csvfile:
         rows = csv.reader(csvfile)
 
         for row in list(rows)[1:]:

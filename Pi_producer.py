@@ -145,6 +145,3 @@ if __name__ == "__main__":
             print("traceback ==> line no: %s" % e_traceback.tb_lineno)
             print("traceback ==> function name: %s" % e_traceback.tb_frame.f_code.co_name)
             continue
-        finally:
-            # 步驟4.關掉Producer實例的連線
-            producer.close()

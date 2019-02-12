@@ -1,29 +1,23 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.externals import joblib
-import csv
-import mysql.connector
-import sys
 
 from stdev_with_tag import transfer
 from tag import dic_generate
 from tag import tag
 
+# ETL.py --> 把ETL後的檔案寫進資料庫
 
 if __name__ == '__main__':
     # filename = str(sys.argv[1])
-    filename = 'data/2019-01-30_21_15.csv'
+    filename = 'data/2019-02-11_20_58.csv'
     transfilename = filename.split('.')[0] + '_trans.csv'
     df = pd.read_csv(filename, encoding='utf-8')
 
     # Step.1 => 貼標
     # 輸入標籤/開始/結束時間, 集合成字典
-    dic1 = dic_generate('0', '2019-01-30 21:24', '2019-01-30 21:33')
-    dic2 = dic_generate('1', '2019-01-30 21:36', '2019-01-30 21:46')
-    dic3 = dic_generate('2', '2019-01-30 21:47', '2019-01-30 21:57')
-    dic4 = dic_generate('3', '2019-01-30 22:00', '2019-01-30 22:02')
+    dic1 = dic_generate('0', '2019-02-11 21:10', '2019-02-11 21:19')
+    dic2 = dic_generate('1', '2019-02-11 21:23', '2019-02-11 21:32')
+    dic3 = dic_generate('2', '2019-02-11 21:33', '2019-02-11 21:42')
+    dic4 = dic_generate('3', '2019-02-11 21:45', '2019-02-11 21:47')
 
     dic_sum = {}
     for d in (dic1, dic2, dic3, dic4):
@@ -54,46 +48,13 @@ if __name__ == '__main__':
     df = pd.concat([df_0_trans, df_1_trans, df_2_trans, df_3_trans], axis=0, ignore_index=True)
     df.to_csv(transfilename, encoding='utf-8', index=False)
 
-    # Step.3 => 建模型
-    # 移除時間與資料編號欄位
-    df = df.drop(['time', 'data_no.'], axis=1)
-    # 切分訓練樣本/測試樣本
-    data_train, data_test, target_train, target_test = train_test_split(
-        df.drop(['tag'], axis=1), df['tag'], test_size=0.3)
+    # Step.3 新data需要concat到原本全部的data
+    f1name = 'data/Total_training_data_0130.csv'
+    f2name = transfilename
 
-    clf = DecisionTreeClassifier(max_depth=4)
-    clf = clf.fit(data_train, target_train)
+    df = pd.read_csv(f1name, encoding='utf-8')
+    df1 = pd.read_csv(f2name, encoding='utf-8')
 
-    predict = clf.predict(data_test)
-    print('預測:', predict)
-    print('答案:', list(target_test))
-    print('準確率:', accuracy_score(target_test, predict) * 100, '%')
+    df = pd.concat([df, df1], axis=0, ignore_index=True)
 
-    # save model
-    joblib.dump(clf, 'clf.pkl')
-
-    # 讀取整理完的檔案, 存入SQL
-    usercode = '00'
-    records = []
-
-    # 讀檔案
-    with open(transfilename, newline='', encoding='utf-8')as csvfile:
-        rows = csv.reader(csvfile)
-
-        for row in list(rows)[1:]:
-            row.insert(0, usercode)
-            records.append(row)
-
-    # 連線
-    db = mysql.connector.connect(
-        user='root',
-        password='1234567890',
-        host='localhost',
-        database='project',
-    )
-    cursor = db.cursor()
-    sql = 'INSERT INTO gyro VALUES' \
-          '(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-    cursor.executemany(sql, records)
-    db.commit()
-    db.close()
+    df.to_csv('data/Total_training_data_0211.csv', encoding='utf-8', index=False)
