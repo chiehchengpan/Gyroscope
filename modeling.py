@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.externals import joblib
+from sklearn.model_selection import KFold
 
 # Modeling.py --> 建模型
 
@@ -38,7 +39,8 @@ if __name__ == '__main__':
     data_train, data_test, target_train, target_test = train_test_split(
                                     df.drop(['tag'], axis=1), df['tag'], test_size=0.3)
     print(df.drop(['tag'], axis=1))
-
+    df.drop(['tag'], axis=1).to_csv('data/model_example.csv', encoding='utf-8', index=False)
+    '''
     # 決策樹
     clf = DecisionTreeClassifier(max_depth=4)
     clf = clf.fit(data_train, target_train)
@@ -60,7 +62,7 @@ if __name__ == '__main__':
     print('答案:', list(target_test))
     print('XGBoost訓練樣本準確率:', accuracy_score(target_train, pred_xg_train) * 100, '%')
     print('XGBoost驗證樣本準確率:', accuracy_score(target_test, pred_xg_test) * 100, '%')
-
+    '''
     # KNN
     knn = KNeighborsClassifier(n_neighbors=5)
     knn = knn.fit(data_train, target_train)
@@ -73,6 +75,6 @@ if __name__ == '__main__':
     print('KNN驗證樣本準確率:', accuracy_score(target_test, pred_kn_test) * 100, '%')
 
     # save model
-    joblib.dump(clf, 'ClassificationTree.pkl')
-    joblib.dump(xgb, 'XGBoost.pkl')
+    # joblib.dump(clf, 'ClassificationTree.pkl')
+    # joblib.dump(xgb, 'XGBoost.pkl')
     joblib.dump(knn, 'KNN.pkl')
